@@ -166,8 +166,13 @@ class PasswordlyApiService {
   }
 
   Future<Map<String, dynamic>> _send(http.Request request) async {
-    final streamedResponse = await _client.send(request);
-    final response = await http.Response.fromStream(streamedResponse);
+    final http.Response response;
+    try {
+      final streamedResponse = await _client.send(request);
+      response = await http.Response.fromStream(streamedResponse);
+    } catch (e) {
+      throw ApiError("Service unavailable.", 500);
+    }
 
     if (response.statusCode >= 401 && response.statusCode <= 499) {
       _handleSessionExpiry();
