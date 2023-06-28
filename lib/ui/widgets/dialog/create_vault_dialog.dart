@@ -51,7 +51,7 @@ class _CreateVaultDialogState extends State<CreateVaultDialog> {
       builder: (context, state) {
         if (state is VaultCreateLoading) {
           return const PasswordlyDefaultDialog(
-            height: 240,
+            height: 280,
             child: Align(
               alignment: Alignment.center,
               child: CircularProgressIndicator(
@@ -63,7 +63,7 @@ class _CreateVaultDialogState extends State<CreateVaultDialog> {
 
         if (state is VaultCreateInitial) {
           return PasswordlyDefaultDialog(
-            height: 240.0,
+            height: 280.0,
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
@@ -91,9 +91,7 @@ class _CreateVaultDialogState extends State<CreateVaultDialog> {
                     )
                   },
                 ),
-                const SizedBox(
-                  height: 32,
-                ),
+                const Spacer(),
                 Row(
                   children: [
                     const Spacer(),
@@ -126,7 +124,7 @@ class _CreateVaultDialogState extends State<CreateVaultDialog> {
         }
 
         return const PasswordlyDefaultDialog(
-          height: 30,
+          height: 280,
         );
       },
     );

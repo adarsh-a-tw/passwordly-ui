@@ -2,5 +2,7 @@ enum RouteArgumentKey {
   shouldSlideLeft,
   didSessionExpire,
   vaultName,
-  vaultId;
+  vaultId,
+  secret,
+  secretType;
 }

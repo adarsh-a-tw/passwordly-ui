@@ -7,7 +7,8 @@ enum PasswordlyEndPoint {
   createVault,
   fetchVaults,
   vaultDetails,
-  deleteVault;
+  deleteVault,
+  createSecret;
 
   String get path {
     switch (this) {
@@ -25,6 +26,8 @@ enum PasswordlyEndPoint {
         return "/api/v1/vaults/{:id}";
       case deleteVault:
         return "/api/v1/vaults/{:id}";
+      case createSecret:
+        return "/api/v1/vaults/{:id}/secrets";
       default:
         return "";
     }
@@ -46,6 +49,8 @@ enum PasswordlyEndPoint {
         return RequestMethod.get;
       case deleteVault:
         return RequestMethod.delete;
+      case createSecret:
+        return RequestMethod.post;
       default:
         return RequestMethod.get;
     }

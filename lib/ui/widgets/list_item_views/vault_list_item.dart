@@ -24,6 +24,8 @@ class VaultListItem extends StatelessWidget {
             },
           )
         },
+        borderRadius: BorderRadius.circular(16.0),
+        splashColor: Theme.of(context).colorScheme.onSecondaryContainer,
         child: Card(
           key: ValueKey(vault.id),
           child: Padding(

@@ -21,7 +21,10 @@ class SecretListView extends StatelessWidget {
       slivers: [
         SliverList(
           delegate: SliverChildBuilderDelegate(
-            (context, index) => SecretListItem(secret: secrets[index]),
+            (context, index) => Padding(
+              padding: const EdgeInsets.symmetric(vertical: 4.0),
+              child: SecretListItem(secret: secrets[index]),
+            ),
             childCount: secrets.length,
           ),
         )

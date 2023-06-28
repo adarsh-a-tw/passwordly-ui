@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:passwordly/logic/cubit/vault_detail_cubit.dart';
+import 'package:passwordly/ui/widgets/dialog/choose_secret_type_dialog.dart';
 import 'package:passwordly/ui/widgets/dialog/delete_vault_dialog.dart';
 import 'package:passwordly/ui/widgets/dialog/passwordly_alert_dialog.dart';
 import 'package:passwordly/ui/widgets/generic_error_message.dart';
@@ -24,7 +25,24 @@ class VaultDetailsScreen extends StatelessWidget {
         backgroundColor: Theme.of(context).colorScheme.secondaryContainer,
         actions: [
           IconButton(
-            onPressed: () async {},
+            onPressed: () async {
+              await showDialog(
+                context: context,
+                builder: (ctx) {
+                  return Dialog(
+                    elevation: 0,
+                    backgroundColor: const Color(0x00ffffff),
+                    // child: SizedBox(
+                    //   height: 320,
+                    child: ChooseSecretTypeDialog(
+                      vaultId: vaultId,
+                    ),
+                    // ),
+                  );
+                },
+              );
+              cubit.fetchVaultDetails(vaultId);
+            },
             icon: const Icon(Icons.add),
           ),
           IconButton(

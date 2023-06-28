@@ -1,3 +1,4 @@
+import 'package:passwordly/data/models/secret.dart';
 import 'package:passwordly/data/models/vault.dart';
 import 'package:passwordly/networking/service/passwordly_api_service.dart';
 
@@ -22,5 +23,21 @@ class VaultRepository {
 
   Future<void> deleteVault(String id) async {
     await _service.deleteVault(id);
+  }
+
+  Future<void> createSecret(
+    String id,
+    String secretName,
+    SecretType type,
+    String username,
+    String password,
+  ) async {
+    await _service.createSecret(
+      id,
+      secretName,
+      type.toString(),
+      username,
+      password,
+    );
   }
 }

@@ -28,6 +28,18 @@ enum SecretType {
   credential,
   key,
   document;
+
+  @override
+  String toString() {
+    switch (this) {
+      case SecretType.credential:
+        return "CREDENTIAL";
+      case SecretType.key:
+        return "KEY";
+      case SecretType.document:
+        return "DOCUMENT";
+    }
+  }
 }
 
 abstract class SecretEntity {}

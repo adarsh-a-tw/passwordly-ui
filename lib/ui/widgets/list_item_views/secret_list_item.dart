@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:passwordly/data/models/secret.dart';
+import 'package:passwordly/ui/routes/route_argument_key.dart';
+import 'package:passwordly/ui/widgets/passwordly_navigator.dart';
 import 'package:passwordly/utils/extended_date_format.dart';
 
 class SecretListItem extends StatelessWidget {
@@ -9,8 +11,14 @@ class SecretListItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 4.0),
+    return InkWell(
+      onTap: () => PasswordlyNavigator.pushNamedWithArguments(
+        context,
+        "/secret",
+        arguments: {RouteArgumentKey.secret: secret},
+      ),
+      borderRadius: BorderRadius.circular(16.0),
+      splashColor: Theme.of(context).colorScheme.onSecondaryContainer,
       child: Card(
         key: ValueKey(secret.id),
         child: Padding(

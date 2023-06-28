@@ -2,8 +2,10 @@ import 'dart:async';
 import 'dart:convert';
 
 import 'package:http/http.dart' as http;
+import 'package:passwordly/data/models/secret.dart';
 import 'package:passwordly/networking/exceptions/api_error.dart';
 import 'package:passwordly/networking/passwordly_end_point.dart';
+import 'package:passwordly/networking/request_builders/create_secret_request_builder.dart';
 import 'package:passwordly/networking/request_builders/create_vault_request_builder.dart';
 import 'package:passwordly/networking/request_builders/fetch_access_token_builder.dart';
 import 'package:passwordly/networking/response_builders/fetch_access_token_response.dart';
@@ -86,6 +88,26 @@ class PasswordlyApiService {
     final request = _configure(
       PasswordlyEndPoint.createVault,
       body: CreateVaultRequestBuilder(name: name).toRequestBody(),
+    );
+    await _send(request);
+  }
+
+  Future<void> createSecret(
+    String vaultId,
+    String name,
+    String type,
+    String username,
+    String password,
+  ) async {
+    final request = _configure(
+      PasswordlyEndPoint.createSecret,
+      body: CreateSecretRequestBuilder(
+        name: name,
+        type: type,
+        username: username,
+        password: password,
+      ).toRequestBody(),
+      params: {"id": vaultId},
     );
     await _send(request);
   }

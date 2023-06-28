@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:passwordly/data/models/secret.dart';
 import 'package:passwordly/data/repositories/vault_repository.dart';
 import 'package:passwordly/logic/cubit/vault_create_cubit.dart';
 import 'package:passwordly/logic/cubit/vault_detail_cubit.dart';
@@ -9,6 +10,7 @@ import 'package:passwordly/ui/routes/route_argument_key.dart';
 import 'package:passwordly/ui/screens/home_screen.dart';
 import 'package:passwordly/ui/screens/landing_screen.dart';
 import 'package:passwordly/ui/screens/login_screen.dart';
+import 'package:passwordly/ui/screens/secret_details_screen.dart';
 import 'package:passwordly/ui/screens/vault_details_screen.dart';
 import 'package:passwordly/utils/route_argument_map.dart';
 
@@ -38,6 +40,11 @@ class PasswordlyRouter {
         final String vaultId = arguments.find(RouteArgumentKey.vaultId, "");
         final String vaultName = arguments.find(RouteArgumentKey.vaultName, "");
         widget = _generateVaultDetailWidget(vaultId, vaultName);
+        break;
+      case "/secret":
+        final Secret secret =
+            arguments.findOrThrow<Secret>(RouteArgumentKey.secret);
+        widget = _generateSecretDetailWidget(secret);
         break;
       default:
         widget = const LandingScreen();
@@ -105,5 +112,9 @@ class PasswordlyRouter {
         vaultId: vaultId,
       ),
     );
+  }
+
+  Widget _generateSecretDetailWidget(Secret secret) {
+    return SecretDetailsScreen(secret: secret);
   }
 }
