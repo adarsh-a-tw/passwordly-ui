@@ -8,7 +8,13 @@ class Vault {
   final DateTime createdAt;
   final DateTime updatedAt;
 
-  Vault(this.id, this.name, this.createdAt, this.updatedAt, this.secrets);
+  Vault(
+    this.id,
+    this.name,
+    this.createdAt,
+    this.updatedAt,
+    this.secrets,
+  );
 
   factory Vault.fromResponse(VaultResponse response) {
     return Vault(
@@ -16,7 +22,11 @@ class Vault {
       response.name,
       DateTime.fromMillisecondsSinceEpoch(response.createdAt * 1000).toLocal(),
       DateTime.fromMillisecondsSinceEpoch(response.updatedAt * 1000).toLocal(),
-      (response.secrets ?? []).map((e) => Secret.fromResponse(e)).toList(),
+      (response.secrets ?? [])
+          .map(
+            (secretResponse) => Secret.fromResponse(secretResponse),
+          )
+          .toList(),
     );
   }
 }

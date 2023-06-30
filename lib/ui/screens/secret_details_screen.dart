@@ -2,9 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:passwordly/data/models/secret.dart';
 import 'package:passwordly/ui/widgets/scaffold/passwordly_scaffold.dart';
-import 'package:flutter/services.dart';
 import 'package:passwordly/ui/widgets/secret_display_view.dart';
-import 'package:passwordly/utils/passwordly_scaffold_messenger.dart';
 
 class SecretDetailsScreen extends StatelessWidget {
   final Secret secret;

@@ -8,7 +8,7 @@ class FetchVaultListResponse {
   factory FetchVaultListResponse.fromJson(Map<String, dynamic> json) {
     return FetchVaultListResponse(
       vaults: ((json["vaults"] ?? []) as List<dynamic>)
-          .map((e) => VaultResponse.fromJson(e))
+          .map((vaultResponse) => VaultResponse.fromJson(vaultResponse))
           .toList(),
     );
   }

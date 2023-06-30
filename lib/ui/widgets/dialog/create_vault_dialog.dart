@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:passwordly/data/repositories/vault_repository.dart';
+import 'package:passwordly/data/repositories/repository_provider.dart';
 import 'package:passwordly/logic/cubit/vault_create_cubit.dart';
-import 'package:passwordly/networking/service/passwordly_api_service_provider.dart';
 import 'package:passwordly/ui/widgets/dialog/passwordly_alert_dialog.dart';
 import 'package:passwordly/ui/widgets/dialog/passwordly_default_dialog.dart';
 import 'package:passwordly/utils/passwordly_scaffold_messenger.dart';
@@ -28,9 +27,7 @@ class _CreateVaultDialogState extends State<CreateVaultDialog> {
   @override
   Widget build(BuildContext context) {
     final cubit = VaultCreateCubit(
-      VaultRepository(
-        PasswordlyApiServiceProvider.service,
-      ),
+      PasswordlyRepositoryProvider().vaultRepository,
     );
     return BlocConsumer<VaultCreateCubit, VaultCreateState>(
       bloc: cubit,

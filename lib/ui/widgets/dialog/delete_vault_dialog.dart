@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:passwordly/data/repositories/vault_repository.dart';
+import 'package:passwordly/data/repositories/repository_provider.dart';
 import 'package:passwordly/logic/cubit/vault_delete_cubit.dart';
-import 'package:passwordly/networking/service/passwordly_api_service_provider.dart';
 import 'package:passwordly/ui/routes/route_argument_key.dart';
 import 'package:passwordly/ui/widgets/dialog/passwordly_alert_dialog.dart';
 import 'package:passwordly/ui/widgets/dialog/passwordly_default_dialog.dart';
@@ -22,9 +21,7 @@ class DeleteVaultDialog extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final cubit = VaultDeleteCubit(
-      VaultRepository(
-        PasswordlyApiServiceProvider.service,
-      ),
+      PasswordlyRepositoryProvider().vaultRepository,
     );
     return BlocConsumer<VaultDeleteCubit, VaultDeleteState>(
       bloc: cubit,

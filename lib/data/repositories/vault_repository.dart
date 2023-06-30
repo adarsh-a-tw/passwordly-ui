@@ -1,43 +1,30 @@
-import 'package:passwordly/data/models/secret.dart';
 import 'package:passwordly/data/models/vault.dart';
-import 'package:passwordly/networking/service/passwordly_api_service.dart';
+import 'package:passwordly/networking/data_providers/vault_data_provider.dart';
 
 class VaultRepository {
-  final PasswordlyApiService _service;
+  final VaultDataProvider _dataProvider;
 
-  VaultRepository(this._service);
+  VaultRepository(this._dataProvider);
 
   Future<List<Vault>> fetchVaults() async {
-    final rawResponse = await _service.fetchVaults();
-    return rawResponse.vaults.map((e) => Vault.fromResponse(e)).toList();
+    final rawResponse = await _dataProvider.fetchVaults();
+    return rawResponse.vaults
+        .map(
+          (vaultResponse) => Vault.fromResponse(vaultResponse),
+        )
+        .toList();
   }
 
   Future<Vault> fetchVault(String id) async {
-    final rawResponse = await _service.fetchVaultDetails(id);
+    final rawResponse = await _dataProvider.fetchVaultDetails(id);
     return Vault.fromResponse(rawResponse);
   }
 
   Future<void> createVault(String name) async {
-    await _service.createVault(name);
+    await _dataProvider.createVault(name);
   }
 
   Future<void> deleteVault(String id) async {
-    await _service.deleteVault(id);
-  }
-
-  Future<void> createSecret(
-    String id,
-    String secretName,
-    SecretType type,
-    String username,
-    String password,
-  ) async {
-    await _service.createSecret(
-      id,
-      secretName,
-      type.toString(),
-      username,
-      password,
-    );
+    await _dataProvider.deleteVault(id);
   }
 }

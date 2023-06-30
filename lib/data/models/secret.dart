@@ -7,7 +7,13 @@ class Secret {
   final DateTime updatedAt;
   final SecretEntity entity;
 
-  Secret(this.id, this.name, this.createdAt, this.updatedAt, this.entity);
+  Secret(
+    this.id,
+    this.name,
+    this.createdAt,
+    this.updatedAt,
+    this.entity,
+  );
 
   factory Secret.fromResponse(SecretResponse response) {
     Credential credential = Credential(

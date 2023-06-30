@@ -1,12 +1,12 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:meta/meta.dart';
 import 'package:passwordly/data/models/secret.dart';
-import 'package:passwordly/data/repositories/vault_repository.dart';
+import 'package:passwordly/data/repositories/secret_repository.dart';
 
 part 'credential_create_state.dart';
 
 class CredentialCreateCubit extends Cubit<CredentialCreateState> {
-  final VaultRepository repository;
+  final SecretRepository repository;
   CredentialCreateCubit(this.repository) : super(CredentialCreateInitial());
 
   Future<void> createCredential(

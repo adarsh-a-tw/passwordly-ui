@@ -1,27 +1,31 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:passwordly/data/repositories/repository_provider.dart';
 import 'package:passwordly/logic/bloc/auth_bloc.dart';
-import 'package:passwordly/data/repositories/auth_repository.dart';
-import 'package:passwordly/networking/service/passwordly_api_service.dart';
-import 'package:passwordly/networking/service/passwordly_api_service_provider.dart';
+import 'package:passwordly/networking/api_client/passwordly_api_client.dart';
+import 'package:passwordly/networking/api_client/passwordly_api_client_provider.dart';
 import 'package:passwordly/ui/routes/route_argument_key.dart';
 import 'package:passwordly/ui/routes/router.dart';
 
 void main() {
-  final service = PasswordlyApiServiceProvider.service;
+  final client = PasswordlyApiClientProvider.client;
+  final repositoryProvider = PasswordlyRepositoryProvider();
+
+  repositoryProvider.configure(client);
+
   runApp(
     PasswordlyApp(
-      router: PasswordlyRouter(service),
-      service: service,
+      PasswordlyRouter(repositoryProvider),
+      client,
     ),
   );
 }
 
 class PasswordlyApp extends StatefulWidget {
-  final PasswordlyRouter router;
-  final PasswordlyApiService service;
+  final PasswordlyRouter _router;
+  final PasswordlyApiClient _client;
 
-  const PasswordlyApp({super.key, required this.router, required this.service});
+  const PasswordlyApp(this._router, this._client, {super.key});
 
   @override
   State<PasswordlyApp> createState() => _PasswordlyAppState();
@@ -32,7 +36,7 @@ class _PasswordlyAppState extends State<PasswordlyApp> {
 
   @override
   void initState() {
-    widget.service.registerSessionExpiryCallback(() {
+    widget._client.registerSessionExpiryCallback(() {
       _navKey.currentState!.pushNamedAndRemoveUntil(
         "/login",
         (route) => false,
@@ -49,15 +53,14 @@ class _PasswordlyAppState extends State<PasswordlyApp> {
   Widget build(BuildContext context) {
     return BlocProvider(
       create: ((context) => AuthBloc(
-            AuthRepository(
-              widget.service,
-            ),
+            PasswordlyRepositoryProvider().authRepository,
+            PasswordlyRepositoryProvider().userRepository,
           )),
       child: MaterialApp(
         navigatorKey: _navKey,
         title: 'Passwordly',
         theme: ThemeData.dark(useMaterial3: true),
-        onGenerateRoute: widget.router.onGenerateRoute,
+        onGenerateRoute: widget._router.onGenerateRoute,
       ),
     );
   }

@@ -1,24 +1,15 @@
-import 'package:passwordly/data/models/user.dart';
-import 'package:passwordly/networking/service/passwordly_api_service.dart';
+import 'package:passwordly/networking/data_providers/auth_data_provider.dart';
 
 class AuthRepository {
-  final PasswordlyApiService _service;
+  final AuthDataProvider _dataProvider;
 
-  AuthRepository(this._service);
+  AuthRepository(this._dataProvider);
 
   Future<void> login(String username, String password) async {
-    await _service.login(username, password);
+    await _dataProvider.login(username, password);
   }
 
   void logout() {
-    _service.logout();
-  }
-
-  bool isAuthenticated() {
-    return _service.isAuthenticated;
-  }
-
-  Future<User> fetchProfile() async {
-    return User.fromResponse(await _service.fetchProfile());
+    _dataProvider.logout();
   }
 }

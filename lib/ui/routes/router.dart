@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:passwordly/data/models/secret.dart';
-import 'package:passwordly/data/repositories/vault_repository.dart';
+import 'package:passwordly/data/repositories/repository_provider.dart';
 import 'package:passwordly/logic/cubit/vault_create_cubit.dart';
 import 'package:passwordly/logic/cubit/vault_detail_cubit.dart';
 import 'package:passwordly/logic/cubit/vault_list_cubit.dart';
-import 'package:passwordly/networking/service/passwordly_api_service.dart';
 import 'package:passwordly/ui/routes/route_argument_key.dart';
 import 'package:passwordly/ui/screens/home_screen.dart';
 import 'package:passwordly/ui/screens/landing_screen.dart';
@@ -15,9 +14,9 @@ import 'package:passwordly/ui/screens/vault_details_screen.dart';
 import 'package:passwordly/utils/route_argument_map.dart';
 
 class PasswordlyRouter {
-  final PasswordlyApiService service;
+  final PasswordlyRepositoryProvider _repositoryProvider;
 
-  PasswordlyRouter(this.service);
+  PasswordlyRouter(this._repositoryProvider);
 
   Route onGenerateRoute(RouteSettings settings) {
     final Map<RouteArgumentKey, dynamic> arguments = settings.arguments != null
@@ -82,14 +81,12 @@ class PasswordlyRouter {
     return MultiBlocProvider(
       providers: [
         BlocProvider<VaultListCubit>(
-          create: (context) => VaultListCubit(
-            VaultRepository(service),
-          ),
+          create: (context) =>
+              VaultListCubit(_repositoryProvider.vaultRepository),
         ),
         BlocProvider<VaultCreateCubit>(
-          create: (context) => VaultCreateCubit(
-            VaultRepository(service),
-          ),
+          create: (context) =>
+              VaultCreateCubit(_repositoryProvider.vaultRepository),
         ),
       ],
       child: const HomeScreen(),
@@ -104,9 +101,7 @@ class PasswordlyRouter {
 
   Widget _generateVaultDetailWidget(String vaultId, String vaultName) {
     return BlocProvider<VaultDetailCubit>(
-      create: (ctx) => VaultDetailCubit(
-        VaultRepository(service),
-      ),
+      create: (ctx) => VaultDetailCubit(_repositoryProvider.vaultRepository),
       child: VaultDetailsScreen(
         vaultName: vaultName,
         vaultId: vaultId,

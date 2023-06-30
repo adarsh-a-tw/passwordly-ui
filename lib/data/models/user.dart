@@ -5,7 +5,11 @@ class User {
   final String username;
   final String email;
 
-  User(this.id, this.username, this.email);
+  User(
+    this.id,
+    this.username,
+    this.email,
+  );
 
   factory User.fromResponse(FetchProfileResponse response) {
     return User(

@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:passwordly/data/models/secret.dart';
-import 'package:passwordly/data/repositories/vault_repository.dart';
+import 'package:passwordly/data/repositories/repository_provider.dart';
 import 'package:passwordly/logic/cubit/credential_create_cubit.dart';
-import 'package:passwordly/networking/service/passwordly_api_service_provider.dart';
 import 'package:passwordly/ui/widgets/dialog/passwordly_alert_dialog.dart';
 import 'package:passwordly/ui/widgets/dialog/passwordly_default_dialog.dart';
 import 'package:passwordly/utils/passwordly_scaffold_messenger.dart';
@@ -19,7 +18,8 @@ class CreateCredentialForm extends StatefulWidget {
 class _CreateCredentialFormState extends State<CreateCredentialForm> {
   final _key = GlobalKey<FormState>();
   final cubit = CredentialCreateCubit(
-      VaultRepository(PasswordlyApiServiceProvider.service));
+    PasswordlyRepositoryProvider().secretRepository,
+  );
   String _secretName = "";
   String _username = "";
   String _password = "";
@@ -64,7 +64,7 @@ class _CreateCredentialFormState extends State<CreateCredentialForm> {
                         },
                         onChanged: (newValue) {
                           setState(() {
-                            _secretName = newValue!;
+                            _secretName = newValue;
                           });
                         },
                         autovalidateMode: AutovalidateMode.onUserInteraction,
@@ -79,7 +79,7 @@ class _CreateCredentialFormState extends State<CreateCredentialForm> {
                         },
                         onChanged: (newValue) {
                           setState(() {
-                            _username = newValue!;
+                            _username = newValue;
                           });
                         },
                         autovalidateMode: AutovalidateMode.onUserInteraction,
@@ -94,7 +94,7 @@ class _CreateCredentialFormState extends State<CreateCredentialForm> {
                         },
                         onChanged: (newValue) {
                           setState(() {
-                            _password = newValue!;
+                            _password = newValue;
                           });
                         },
                         autovalidateMode: AutovalidateMode.onUserInteraction,
