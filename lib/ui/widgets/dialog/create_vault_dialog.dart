@@ -26,104 +26,107 @@ class _CreateVaultDialogState extends State<CreateVaultDialog> {
 
   @override
   Widget build(BuildContext context) {
-    final cubit = VaultCreateCubit(
-      PasswordlyRepositoryProvider().vaultRepository,
-    );
     return BlocConsumer<VaultCreateCubit, VaultCreateState>(
-      bloc: cubit,
-      listener: (context, state) async {
-        if (state is VaultCreateSuccess && Navigator.canPop(context)) {
-          PasswordlyScaffoldMessenger.showSnackBar(
-            context,
-            "$_vaultName created successfully.",
-          );
-          Navigator.pop(context);
-        } else if (state is VaultCreateError) {
-          await PasswordlyAlertDialog.show("Error", state.message, context);
-          if (context.mounted) {
-            cubit.resetState();
-          }
-        }
-      },
-      builder: (context, state) {
-        if (state is VaultCreateLoading) {
-          return const PasswordlyDefaultDialog(
-            height: 280,
-            child: Align(
-              alignment: Alignment.center,
-              child: CircularProgressIndicator(
-                backgroundColor: Colors.transparent,
-              ),
-            ),
-          );
-        }
+      bloc: VaultCreateCubit(
+        PasswordlyRepositoryProvider().vaultRepository,
+      ),
+      listener: _vaultCreateCubitListener,
+      builder: _vaultCreateCubitBuilder,
+    );
+  }
 
-        if (state is VaultCreateInitial) {
-          return PasswordlyDefaultDialog(
-            height: 280.0,
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
+  Widget _vaultCreateCubitBuilder(context, state) {
+    if (state is VaultCreateLoading) {
+      return const PasswordlyDefaultDialog(
+        height: 280,
+        child: Align(
+          alignment: Alignment.center,
+          child: CircularProgressIndicator(
+            backgroundColor: Colors.transparent,
+          ),
+        ),
+      );
+    }
+
+    if (state is VaultCreateInitial) {
+      return PasswordlyDefaultDialog(
+        height: 280.0,
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Text(
+              "Enter Vault name",
+              style: Theme.of(context).textTheme.headlineSmall,
+            ),
+            const SizedBox(
+              height: 32,
+            ),
+            TextField(
+              controller: _controller,
+              decoration: InputDecoration(
+                errorText: _errorMessage,
+              ),
+              autofocus: true,
+              onChanged: (value) => {
+                setState(
+                  () {
+                    _vaultName = value;
+                    _errorMessage =
+                        _vaultName.trim().isEmpty ? "Enter a valid name" : null;
+                  },
+                )
+              },
+            ),
+            const Spacer(),
+            Row(
               children: [
-                Text(
-                  "Enter Vault name",
-                  style: Theme.of(context).textTheme.headlineSmall,
+                const Spacer(),
+                ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor:
+                        Theme.of(context).colorScheme.primaryContainer,
+                  ),
+                  onPressed: _errorMessage == null
+                      ? () {
+                          BlocProvider.of<VaultCreateCubit>(context)
+                              .createVault(_vaultName);
+                        }
+                      : null,
+                  child: const Text("Save"),
                 ),
                 const SizedBox(
-                  height: 32,
+                  width: 16,
                 ),
-                TextField(
-                  controller: _controller,
-                  decoration: InputDecoration(
-                    errorText: _errorMessage,
-                  ),
-                  autofocus: true,
-                  onChanged: (value) => {
-                    setState(
-                      () {
-                        _vaultName = value;
-                        _errorMessage = _vaultName.trim().isEmpty
-                            ? "Enter a valid name"
-                            : null;
-                      },
-                    )
+                TextButton(
+                  onPressed: () {
+                    Navigator.pop(context);
                   },
-                ),
-                const Spacer(),
-                Row(
-                  children: [
-                    const Spacer(),
-                    ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor:
-                            Theme.of(context).colorScheme.primaryContainer,
-                      ),
-                      onPressed: _errorMessage == null
-                          ? () {
-                              cubit.createVault(_vaultName);
-                            }
-                          : null,
-                      child: const Text("Save"),
-                    ),
-                    const SizedBox(
-                      width: 16,
-                    ),
-                    TextButton(
-                      onPressed: () {
-                        Navigator.pop(context);
-                      },
-                      child: const Text("Cancel"),
-                    )
-                  ],
+                  child: const Text("Cancel"),
                 )
               ],
-            ),
-          );
-        }
+            )
+          ],
+        ),
+      );
+    }
 
-        return const PasswordlyDefaultDialog(
-          height: 280,
-        );
-      },
+    return const PasswordlyDefaultDialog(
+      height: 280,
     );
+  }
+
+  void _vaultCreateCubitListener(context, state) async {
+    if (state is VaultCreateSuccess && Navigator.canPop(context)) {
+      PasswordlyScaffoldMessenger.showSnackBar(
+        context,
+        "$_vaultName created successfully.",
+      );
+      Navigator.pop(context);
+    } else if (state is VaultCreateError) {
+      await PasswordlyAlertDialog.show("Error", state.message, context);
+      if (context.mounted) {
+        BlocProvider.of<VaultCreateCubit>(context).resetState();
+      }
+    }
   }
 }

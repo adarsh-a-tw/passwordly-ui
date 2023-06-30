@@ -9,20 +9,24 @@ class VaultListItem extends StatelessWidget {
 
   const VaultListItem({super.key, required this.vault});
 
+  void _onTapAction(BuildContext context) {
+    PasswordlyNavigator.pushNamedWithArguments(
+      context,
+      "/vault",
+      arguments: {
+        RouteArgumentKey.vaultId: vault.id,
+        RouteArgumentKey.vaultName: vault.name,
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 4.0),
       child: InkWell(
-        onTap: () => {
-          PasswordlyNavigator.pushNamedWithArguments(
-            context,
-            "/vault",
-            arguments: {
-              RouteArgumentKey.vaultId: vault.id,
-              RouteArgumentKey.vaultName: vault.name,
-            },
-          )
+        onTap: () {
+          _onTapAction(context);
         },
         borderRadius: BorderRadius.circular(16.0),
         splashColor: Theme.of(context).colorScheme.onSecondaryContainer,

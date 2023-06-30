@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
 
 class PrimaryButton extends StatelessWidget {
-  const PrimaryButton({super.key, required this.title, this.onPressed});
+  const PrimaryButton({
+    super.key,
+    required this.title,
+    this.onPressed,
+  });
 
   final String title;
   final void Function()? onPressed;

@@ -9,7 +9,7 @@ class VaultDetailCubit extends Cubit<VaultDetailState> {
   final VaultRepository repository;
   VaultDetailCubit(this.repository) : super(VaultDetailLoading());
 
-  void fetchVaultDetails(String id) async {
+  Future<void> fetchVaultDetails(String id) async {
     emit(VaultDetailLoading());
     try {
       final vault = await repository.fetchVault(id);

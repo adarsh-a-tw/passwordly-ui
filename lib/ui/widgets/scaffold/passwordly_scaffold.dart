@@ -20,14 +20,7 @@ class PasswordlyScaffold extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       drawer: drawer,
-      appBar: appBar == null && appBarTitle == null
-          ? null
-          : appBar ??
-              AppBar(
-                title: Text(appBarTitle!),
-                backgroundColor:
-                    Theme.of(context).colorScheme.secondaryContainer,
-              ),
+      appBar: _generateAppBar(context),
       body: SafeArea(
         child: Padding(
           padding: padding ?? const EdgeInsets.all(0.0),
@@ -35,5 +28,15 @@ class PasswordlyScaffold extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  AppBar? _generateAppBar(BuildContext context) {
+    return appBar == null && appBarTitle == null
+        ? null
+        : appBar ??
+            AppBar(
+              title: Text(appBarTitle!),
+              backgroundColor: Theme.of(context).colorScheme.secondaryContainer,
+            );
   }
 }

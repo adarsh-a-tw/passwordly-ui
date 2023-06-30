@@ -19,6 +19,15 @@ class SecretDisplayView extends StatefulWidget {
 
 class _SecretDisplayViewState extends State<SecretDisplayView> {
   bool _isTextObscured = true;
+  final String kObscuredText = "*" * 20;
+
+  void _copyToClipboard() async {
+    await Clipboard.setData(ClipboardData(text: widget.text));
+    if (context.mounted) {
+      PasswordlyScaffoldMessenger.showSnackBar(
+          context, "${widget.title} copied.");
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -34,23 +43,26 @@ class _SecretDisplayViewState extends State<SecretDisplayView> {
         padding: const EdgeInsets.all(8.0),
         child: Row(
           children: [
-            Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-              Text(
-                widget.title,
-                style: Theme.of(context).textTheme.bodyLarge!.copyWith(
-                      color: Theme.of(context).colorScheme.onPrimaryContainer,
-                    ),
-              ),
-              const SizedBox(
-                height: 4,
-              ),
-              Text(
-                _isTextObscured && widget.needsSecurity
-                    ? "*" * 20
-                    : widget.text,
-                style: Theme.of(context).textTheme.bodyMedium,
-              ),
-            ]),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  widget.title,
+                  style: Theme.of(context).textTheme.bodyLarge!.copyWith(
+                        color: Theme.of(context).colorScheme.onPrimaryContainer,
+                      ),
+                ),
+                const SizedBox(
+                  height: 4,
+                ),
+                Text(
+                  widget.needsSecurity && _isTextObscured
+                      ? kObscuredText
+                      : widget.text,
+                  style: Theme.of(context).textTheme.bodyMedium,
+                ),
+              ],
+            ),
             const Spacer(),
             if (widget.needsSecurity)
               InkWell(
@@ -79,13 +91,7 @@ class _SecretDisplayViewState extends State<SecretDisplayView> {
                 width: 16,
               ),
             IconButton(
-              onPressed: () async {
-                await Clipboard.setData(ClipboardData(text: widget.text));
-                if (context.mounted) {
-                  PasswordlyScaffoldMessenger.showSnackBar(
-                      context, "${widget.title} copied.");
-                }
-              },
+              onPressed: _copyToClipboard,
               icon: Icon(
                 Icons.copy,
                 color: Theme.of(context).colorScheme.onPrimaryContainer,

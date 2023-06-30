@@ -5,12 +5,17 @@ import 'package:passwordly/ui/widgets/dialog/create_secret_dialog.dart';
 import 'package:passwordly/ui/widgets/dialog/passwordly_default_dialog.dart';
 import 'package:passwordly/ui/widgets/passwordly_navigator.dart';
 
-class ChooseSecretTypeDialog extends StatelessWidget {
+class ChooseSecretTypeDialog extends StatefulWidget {
   final String vaultId;
 
   const ChooseSecretTypeDialog({super.key, required this.vaultId});
 
-  void onSelect(BuildContext context, SecretType type) {
+  @override
+  State<ChooseSecretTypeDialog> createState() => _ChooseSecretTypeDialogState();
+}
+
+class _ChooseSecretTypeDialogState extends State<ChooseSecretTypeDialog> {
+  void _onSelect(BuildContext context, SecretType type) {
     PasswordlyNavigator.pushNamedWithArguments(
       context,
       "/create",
@@ -18,90 +23,92 @@ class ChooseSecretTypeDialog extends StatelessWidget {
     );
   }
 
+  Route<dynamic>? _nestedNavigatorOnGenerateRoutes(settings) {
+    switch (settings.name) {
+      case "/create":
+        return MaterialPageRoute(
+          builder: (ctx) => CreateSecretDialog(
+            type: (settings.arguments
+                as Map<RouteArgumentKey, dynamic>)[RouteArgumentKey.secretType],
+            vaultId: widget.vaultId,
+          ),
+        );
+      default:
+        return MaterialPageRoute(builder: (ctx) {
+          return Center(
+            child: SizedBox(
+              height: 248,
+              child: PasswordlyDefaultDialog(
+                height: 248,
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Text(
+                      "What do you want to add?",
+                      style: Theme.of(context).textTheme.bodyLarge,
+                    ),
+                    const SizedBox(
+                      height: 32,
+                    ),
+                    SizedBox(
+                      height: 90,
+                      width: double.infinity,
+                      child: GridView.count(
+                        physics: const NeverScrollableScrollPhysics(),
+                        crossAxisCount: 3,
+                        mainAxisSpacing: 16,
+                        crossAxisSpacing: 16,
+                        children: [
+                          _SecretTypeGridItem(
+                            iconData: Icons.lock,
+                            name: "Credential",
+                            onPressed: () {
+                              _onSelect(ctx, SecretType.credential);
+                            },
+                          ),
+                          const _SecretTypeGridItem(
+                            iconData: Icons.key,
+                            name: "Key",
+                            onPressed: null,
+                          ),
+                          const _SecretTypeGridItem(
+                            iconData: Icons.edit_document,
+                            name: "Document",
+                            onPressed: null,
+                          ),
+                        ],
+                      ),
+                    ),
+                    const SizedBox(
+                      height: 16,
+                    ),
+                    Row(
+                      children: [
+                        const Spacer(),
+                        ElevatedButton(
+                          onPressed: () {
+                            Navigator.of(context, rootNavigator: true).pop();
+                          },
+                          child: const Text("Cancel"),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          );
+        });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Navigator(
       initialRoute: "/",
-      onGenerateRoute: (settings) {
-        switch (settings.name) {
-          case "/create":
-            return MaterialPageRoute(
-              builder: (ctx) => CreateSecretDialog(
-                type: (settings.arguments as Map<RouteArgumentKey, dynamic>)[
-                    RouteArgumentKey.secretType],
-                vaultId: vaultId,
-              ),
-            );
-          default:
-            return MaterialPageRoute(builder: (ctx) {
-              return Center(
-                child: SizedBox(
-                  height: 248,
-                  child: PasswordlyDefaultDialog(
-                    height: 248,
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        Text(
-                          "What do you want to add?",
-                          style: Theme.of(context).textTheme.bodyLarge,
-                        ),
-                        const SizedBox(
-                          height: 32,
-                        ),
-                        SizedBox(
-                          height: 90,
-                          width: double.infinity,
-                          child: GridView.count(
-                            physics: const NeverScrollableScrollPhysics(),
-                            crossAxisCount: 3,
-                            mainAxisSpacing: 16,
-                            crossAxisSpacing: 16,
-                            children: [
-                              _SecretTypeGridItem(
-                                iconData: Icons.lock,
-                                name: "Credential",
-                                onPressed: () {
-                                  onSelect(ctx, SecretType.credential);
-                                },
-                              ),
-                              const _SecretTypeGridItem(
-                                  iconData: Icons.key,
-                                  name: "Key",
-                                  onPressed: null),
-                              const _SecretTypeGridItem(
-                                iconData: Icons.edit_document,
-                                name: "Document",
-                                onPressed: null,
-                              ),
-                            ],
-                          ),
-                        ),
-                        const SizedBox(
-                          height: 16,
-                        ),
-                        Row(
-                          children: [
-                            const Spacer(),
-                            ElevatedButton(
-                              onPressed: () {
-                                Navigator.of(context, rootNavigator: true)
-                                    .pop();
-                              },
-                              child: const Text("Cancel"),
-                            ),
-                          ],
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-              );
-            });
-        }
-      },
+      onGenerateRoute: _nestedNavigatorOnGenerateRoutes,
     );
   }
 }

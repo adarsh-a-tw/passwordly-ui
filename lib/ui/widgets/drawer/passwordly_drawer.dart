@@ -7,6 +7,16 @@ import 'package:passwordly/ui/widgets/passwordly_navigator.dart';
 class PasswordlyDrawer extends StatelessWidget {
   const PasswordlyDrawer({super.key});
 
+  void _logoutAction(BuildContext context) {
+    BlocProvider.of<AuthBloc>(context).authRepository.logout();
+    PasswordlyNavigator.pushNamedAndRemoveUntilWithArguments(
+      context,
+      "/login",
+      (route) => false,
+      arguments: {RouteArgumentKey.shouldSlideLeft: true},
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<AuthBloc, AuthState>(
@@ -45,13 +55,7 @@ class PasswordlyDrawer extends StatelessWidget {
                       ),
                 ),
                 onTap: () {
-                  BlocProvider.of<AuthBloc>(context).authRepository.logout();
-                  PasswordlyNavigator.pushNamedAndRemoveUntilWithArguments(
-                    context,
-                    "/login",
-                    (route) => false,
-                    arguments: {RouteArgumentKey.shouldSlideLeft: true},
-                  );
+                  _logoutAction(context);
                 },
               ),
             ],

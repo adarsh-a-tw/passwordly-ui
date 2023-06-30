@@ -9,14 +9,20 @@ class SecretListItem extends StatelessWidget {
 
   const SecretListItem({super.key, required this.secret});
 
+  void _onTapAction(BuildContext context) {
+    PasswordlyNavigator.pushNamedWithArguments(
+      context,
+      "/secret",
+      arguments: {RouteArgumentKey.secret: secret},
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      onTap: () => PasswordlyNavigator.pushNamedWithArguments(
-        context,
-        "/secret",
-        arguments: {RouteArgumentKey.secret: secret},
-      ),
+      onTap: () {
+        _onTapAction(context);
+      },
       borderRadius: BorderRadius.circular(16.0),
       splashColor: Theme.of(context).colorScheme.onSecondaryContainer,
       child: Card(
