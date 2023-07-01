@@ -8,7 +8,7 @@ import 'package:passwordly/networking/request_builders/fetch_access_token_builde
 import 'package:passwordly/networking/response_builders/fetch_access_token_response.dart';
 
 class PasswordlyApiClient {
-  static const apiHostUrl = "localhost:8080";
+  final String _apiHostUrl;
 
   final _client = http.Client();
 
@@ -18,7 +18,7 @@ class PasswordlyApiClient {
 
   Function()? _sessionExpiryCallback;
 
-  PasswordlyApiClient();
+  PasswordlyApiClient(this._apiHostUrl);
 
   http.Request configureRequest(
     PasswordlyEndPoint endPoint, {
@@ -39,7 +39,7 @@ class PasswordlyApiClient {
     final request = http.Request(
       endPoint.method.rawValue,
       Uri.http(
-        apiHostUrl,
+        _apiHostUrl,
         parameterisedEndpoint,
         queryParams,
       ),
