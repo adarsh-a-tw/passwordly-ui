@@ -91,7 +91,7 @@ class _VaultDetailsScreenState extends State<VaultDetailsScreen> {
     } else if (state is VaultDetailSuccess) {
       return SecretListView(secrets: state.vault.secrets);
     } else if (state is VaultDetailError) {
-      return Column();
+      return const Column();
     } else {
       return const GenericErrorMessage();
     }

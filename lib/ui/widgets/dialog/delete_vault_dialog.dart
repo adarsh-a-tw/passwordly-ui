@@ -12,7 +12,11 @@ class DeleteVaultDialog extends StatelessWidget {
   final String vaultId;
   final String vaultName;
 
-  const DeleteVaultDialog({
+  final _cubit = VaultDeleteCubit(
+    PasswordlyRepositoryProvider().vaultRepository,
+  );
+
+  DeleteVaultDialog({
     super.key,
     required this.vaultId,
     required this.vaultName,
@@ -21,9 +25,7 @@ class DeleteVaultDialog extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocConsumer<VaultDeleteCubit, VaultDeleteState>(
-      bloc: VaultDeleteCubit(
-        PasswordlyRepositoryProvider().vaultRepository,
-      ),
+      bloc: _cubit,
       listener: _vaultDeleteCubitListener,
       builder: _vaultDeleteCubitBuilder,
     );
@@ -71,8 +73,7 @@ class DeleteVaultDialog extends StatelessWidget {
                     backgroundColor: Colors.red,
                   ),
                   onPressed: () {
-                    BlocProvider.of<VaultDeleteCubit>(context)
-                        .deleteVault(vaultId);
+                    _cubit.deleteVault(vaultId);
                   },
                   child: const Text(
                     "Confirm",

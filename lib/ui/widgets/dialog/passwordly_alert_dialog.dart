@@ -37,7 +37,7 @@ class PasswordlyAlertDialog {
             content: Text(content),
             actions: [
               TextButton(
-                child: const Text('Ok'),
+                child: Text(buttonText),
                 onPressed: () {
                   Navigator.pop(ctx);
                 },

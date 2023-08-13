@@ -38,7 +38,7 @@ class PasswordlyApiClient {
     }
     final request = http.Request(
       endPoint.method.rawValue,
-      Uri.http(
+      Uri.https(
         _apiHostUrl,
         parameterisedEndpoint,
         queryParams,

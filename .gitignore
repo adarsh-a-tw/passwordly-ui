@@ -70,3 +70,5 @@ lib/generated_plugin_registrant.dart
 env.json
 
 .vscode/
+
+.DS_Store

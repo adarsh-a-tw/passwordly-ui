@@ -18,6 +18,10 @@ class _CreateVaultDialogState extends State<CreateVaultDialog> {
   String _vaultName = "My new vault";
   String? _errorMessage;
 
+  final _cubit = VaultCreateCubit(
+    PasswordlyRepositoryProvider().vaultRepository,
+  );
+
   @override
   void initState() {
     _controller.text = _vaultName;
@@ -27,9 +31,7 @@ class _CreateVaultDialogState extends State<CreateVaultDialog> {
   @override
   Widget build(BuildContext context) {
     return BlocConsumer<VaultCreateCubit, VaultCreateState>(
-      bloc: VaultCreateCubit(
-        PasswordlyRepositoryProvider().vaultRepository,
-      ),
+      bloc: _cubit,
       listener: _vaultCreateCubitListener,
       builder: _vaultCreateCubitBuilder,
     );
@@ -88,8 +90,7 @@ class _CreateVaultDialogState extends State<CreateVaultDialog> {
                   ),
                   onPressed: _errorMessage == null
                       ? () {
-                          BlocProvider.of<VaultCreateCubit>(context)
-                              .createVault(_vaultName);
+                          _cubit.createVault(_vaultName);
                         }
                       : null,
                   child: const Text("Save"),
@@ -125,7 +126,7 @@ class _CreateVaultDialogState extends State<CreateVaultDialog> {
     } else if (state is VaultCreateError) {
       await PasswordlyAlertDialog.show("Error", state.message, context);
       if (context.mounted) {
-        BlocProvider.of<VaultCreateCubit>(context).resetState();
+        _cubit.resetState();
       }
     }
   }

@@ -84,7 +84,7 @@ class _HomeScreenState extends State<HomeScreen> {
     } else if (state is VaultListSuccess) {
       return VaultListView(vaults: state.vaults);
     } else if (state is VaultListError) {
-      return Column();
+      return const Column();
     } else {
       return const GenericErrorMessage();
     }
