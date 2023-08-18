@@ -9,4 +9,8 @@ class UserRepository {
   Future<User> fetchProfile() async {
     return User.fromResponse(await _dataProvider.fetchProfile());
   }
+
+  Future<void> signup(String username, String email, String password) async {
+    await _dataProvider.signup(username, email, password);
+  }
 }

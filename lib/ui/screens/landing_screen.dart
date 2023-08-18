@@ -43,7 +43,10 @@ class LandingScreen extends StatelessWidget {
               height: 10,
             ),
             ElevatedButton(
-              onPressed: () {},
+              onPressed: () => PasswordlyNavigator.pushNamedWithArguments(
+                context,
+                "/signup",
+              ),
               style: ElevatedButton.styleFrom(
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(10.0),

@@ -4,6 +4,7 @@ enum PasswordlyEndPoint {
   login,
   fetchAccessToken,
   fetchProfile,
+  signup,
   createVault,
   fetchVaults,
   vaultDetails,
@@ -18,6 +19,8 @@ enum PasswordlyEndPoint {
         return "/api/v1/users/access-token";
       case fetchProfile:
         return "/api/v1/users/me";
+      case signup:
+        return "/api/v1/users";
       case createVault:
         return "/api/v1/vaults";
       case fetchVaults:
@@ -41,6 +44,8 @@ enum PasswordlyEndPoint {
         return RequestMethod.post;
       case fetchProfile:
         return RequestMethod.get;
+      case signup:
+        return RequestMethod.post;
       case createVault:
         return RequestMethod.post;
       case fetchVaults:

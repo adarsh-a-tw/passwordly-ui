@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:passwordly/data/models/secret.dart';
 import 'package:passwordly/data/repositories/repository_provider.dart';
+import 'package:passwordly/logic/cubit/user_create_cubit.dart';
 import 'package:passwordly/logic/cubit/vault_create_cubit.dart';
 import 'package:passwordly/logic/cubit/vault_detail_cubit.dart';
 import 'package:passwordly/logic/cubit/vault_list_cubit.dart';
@@ -10,6 +11,7 @@ import 'package:passwordly/ui/screens/home_screen.dart';
 import 'package:passwordly/ui/screens/landing_screen.dart';
 import 'package:passwordly/ui/screens/login_screen.dart';
 import 'package:passwordly/ui/screens/secret_details_screen.dart';
+import 'package:passwordly/ui/screens/signup_screen.dart';
 import 'package:passwordly/ui/screens/vault_details_screen.dart';
 import 'package:passwordly/utils/route_argument_map.dart';
 
@@ -34,6 +36,9 @@ class PasswordlyRouter {
         final bool didSessionExpire =
             arguments.find(RouteArgumentKey.didSessionExpire, false);
         widget = _generateLoginWidget(didSessionExpire);
+        break;
+      case "/signup":
+        widget = _signupWidget;
         break;
       case "/vault":
         final String vaultId = arguments.find(RouteArgumentKey.vaultId, "");
@@ -96,6 +101,13 @@ class PasswordlyRouter {
   Widget _generateLoginWidget(bool didSessionExpire) {
     return LoginScreen(
       showSessionExpiredMessage: didSessionExpire,
+    );
+  }
+
+  Widget get _signupWidget {
+    return BlocProvider(
+      create: (context) => UserCreateCubit(_repositoryProvider.userRepository),
+      child: const SignupScreen(),
     );
   }
 
