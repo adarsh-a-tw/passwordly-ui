@@ -30,7 +30,9 @@ jobs:
       - name: Build Android APK
         env:
           API_URL: ${{ secrets.API_URL }}
-        run: flutter build apk --split-per-abi --release --dart-define="API_URL=${API_URL}"
+        run: |
+          echo $API_URL
+          flutter build apk --split-per-abi --release --dart-define="API_URL=${API_URL}"
 
       - name: Upload mappings.txt, sourcemaps and apk
         uses: actions/upload-artifact@v3
