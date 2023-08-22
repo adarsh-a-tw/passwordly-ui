@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:passwordly/logic/bloc/auth_bloc.dart';
 import 'package:passwordly/logic/cubit/user_create_cubit.dart';
 import 'package:passwordly/ui/widgets/buttons/primary_button.dart';
 import 'package:passwordly/ui/widgets/dialog/passwordly_alert_dialog.dart';
@@ -106,7 +105,9 @@ class _SignupScreenState extends State<SignupScreen> {
               onSaved: (newValue) => _username = newValue ?? "",
               autovalidateMode: AutovalidateMode.onUserInteraction,
               validator: (value) {
-                return _isUsernameValid ? null : "Username should be atleast 5 and atmost 20 characters";
+                return _isUsernameValid
+                    ? null
+                    : "Username should be atleast 5 and atmost 20 characters";
               }),
           const SizedBox(
             height: 10,

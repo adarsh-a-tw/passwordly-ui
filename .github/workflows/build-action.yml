@@ -1,16 +1,17 @@
 name: Android Release
 
-on:
+on: 
   push:
-    branches: ["main"]
-  pull_request:
-    branches: ["main"]
+    tags:
+    - '*'
 
   workflow_dispatch:
 
 jobs:
   build:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
     steps:
       - uses: actions/checkout@v3
 
@@ -27,13 +28,26 @@ jobs:
       - name: Get dependencies
         run: flutter pub get
 
+      - name: Install GitVersion
+        uses: gittools/actions/gitversion/setup@v0.9.7
+        with:
+          versionSpec: "5.x"
+
+      - name: Use GitVersion
+        id: gitversion
+        uses: gittools/actions/gitversion/execute@v0.9.7
+
       - name: Build Android APK
         run: |
-          flutter build apk --split-per-abi --release --dart-define="API_URL=${{ vars.API_URL }}"
+          flutter build apk --split-per-abi --release --dart-define="API_URL=${{ vars.API_URL }}" --build-name=${{ steps.gitversion.outputs.majorMinorPatch }} --build-number=${{ github.run_number }}
 
-      - name: Upload mappings.txt, sourcemaps and apk
-        uses: actions/upload-artifact@v3
+      # - name: Upload mappings.txt, sourcemaps and apk
+      #   uses: actions/upload-artifact@v3
+      #   with:
+      #     path: |
+      #       build/app/outputs/flutter-apk/*.apk
+      #       build/app/outputs/mapping/**/mapping.txt
+
+      - uses: ncipollo/release-action@v1
         with:
-          path: |
-            build/app/outputs/flutter-apk/*.apk
-            build/app/outputs/mapping/**/mapping.txt
+          artifacts: "build/app/outputs/flutter-apk/*.apk,build/app/outputs/mapping/**/mapping.txt"
