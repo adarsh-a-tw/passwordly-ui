@@ -126,8 +126,17 @@ class _LandingActionsState extends State<_LandingActions> {
     return Column(children: _loginAndSignup);
   }
 
-  Widget get androidDeviceDefaultActions {
-    return Column(children: _loginAndSignup);
+  Widget androidDeviceDefaultActions(Version currentVersion) {
+    return Column(children: [
+      ..._loginAndSignup,
+      const SizedBox(
+        height: 20,
+      ),
+      Text(
+        "Installed version: ${currentVersion.toString()}",
+        style: Theme.of(context).textTheme.bodyMedium,
+      ),
+    ]);
   }
 
   Widget androidDeviceActionsWhenVersionFetchFails(String message) {
@@ -242,7 +251,9 @@ class _LandingActionsState extends State<_LandingActions> {
                   );
                 }
 
-                return androidDeviceDefaultActions;
+                return androidDeviceDefaultActions(
+                  versionInfoState.currentVersion,
+                );
               }
             }
           }
