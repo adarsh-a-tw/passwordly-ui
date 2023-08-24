@@ -39,16 +39,17 @@ jobs:
         id: gitversion
         uses: gittools/actions/gitversion/execute@v0.9.7
 
+      - name: Create release.keystore
+        run: |
+          echo $SECRET_DATA | base64 -d > release.keystore          
+        env:
+          SECRET_DATA: ${{ secrets.KEYSTORE_FILE }}
+
       - name: Build Android APK
         run: |
           flutter build apk --split-per-abi --release --dart-define="GH_REPO=${{ vars.GH_REPO }}" --dart-define="API_URL=${{ vars.API_URL }}" --build-name=${{ steps.gitversion.outputs.majorMinorPatch }} --build-number=${{ github.run_number }}
-
-      # - name: Upload mappings.txt, sourcemaps and apk
-      #   uses: actions/upload-artifact@v3
-      #   with:
-      #     path: |
-      #       build/app/outputs/flutter-apk/*.apk
-      #       build/app/outputs/mapping/**/mapping.txt
+        env:
+          KEYSTORE_PASSWORD: ${{ secrets.KEYSTORE_PASSWORD }}
 
       - uses: ncipollo/release-action@v1
         with:
