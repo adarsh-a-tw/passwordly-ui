@@ -13,6 +13,6 @@ class Environment {
   }
 
   String get kGithubRepo {
-    return const String.fromEnvironment("GITHUB_REPO");
+    return const String.fromEnvironment("GH_REPO");
   }
 }
