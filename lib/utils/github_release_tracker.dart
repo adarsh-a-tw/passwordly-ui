@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
+import 'package:passwordly/utils/environment.dart';
 
 import '../data/models/version.dart';
 import '../networking/exceptions/api_error.dart';
@@ -15,7 +16,7 @@ class GithubReleaseTracker {
       response = await _client.get(
         Uri.https(
           _githubBaseUrl,
-          "/repos/adarsh-a-tw/passwordly-ui/releases/latest",
+          "/repos/${Environment().kGithubRepo}/releases/latest",
         ),
       );
     } catch (e) {
