@@ -11,4 +11,8 @@ class Environment {
   String get kApiClientUrl {
     return const String.fromEnvironment("API_URL");
   }
+
+  String get kGithubRepo {
+    return const String.fromEnvironment("GITHUB_REPO");
+  }
 }
